@@ -1,96 +1,104 @@
-window.addEventListener('DOMContentLoaded', () => {
-  const card = document.getElementById('card');
-  const button = document.getElementById('openBtn');
-  const photoContainer = document.getElementById('photoContainer');
-  const secondMessage = document.getElementById('secondMessage');
-  const heartsContainer = document.getElementById('hearts');
-  const song = document.getElementById('song');
-  const flowersContainer = document.getElementById('flowersContainer');
+const card = document.getElementById('card');
+const btn = document.getElementById('openBtn');
+const photo = document.getElementById('photoContainer');
+const text = document.getElementById('secondMessage');
+const heartsBox = document.getElementById('hearts');
+const song = document.getElementById('song');
+const flowers = document.getElementById('flowersContainer');
+const projectBtn = document.getElementById('projectBtn');
 
-  button.addEventListener('click', () => {
-    card.classList.toggle('open');
+const COLORS = ['#ff6b81','#ff9ff3','#feca57','#ffffff','#c56cf0','#ff4757'];
+let flowerCount = 0;
 
+btn.onclick = () => {
+  card.classList.add('open');
+
+  setTimeout(() => {
+    photo.classList.add('show');
+    typeText("Я тебя очень люблю", text);
+    fadeMusic();
+    spawnHearts();
+    startGarden();
+
+    // Показ кнопки с ссылкой после появления цветов
     setTimeout(() => {
-      photoContainer.style.transform = "translate(-50%, -50%) scale(1)";
-      photoContainer.style.opacity = "1";
-      secondMessage.textContent = "Я тебя очень люблю";
-      secondMessage.style.opacity = "1";
+      projectBtn.classList.add('show');
+    }, 1000);
 
-      if (song) song.play();
-      createFloatingHearts(30);
+  }, 2000);
+};
 
-      const startTime = Date.now();
-      const flowerInterval = setInterval(() => {
-        if (Date.now() - startTime > 30000) { // 30 секунд
-          clearInterval(flowerInterval);
-        } else {
-          for (let i = 0; i < 2; i++) createLayeredFlower();
-        }
-      }, 500);
-    }, 2000);
-  });
+function typeText(t, el) {
+  el.textContent = "";
+  el.style.opacity = 1;
+  let i = 0;
+  const int = setInterval(() => {
+    el.textContent += t[i++];
+    if (i >= t.length) clearInterval(int);
+  }, 80);
+}
 
-  function createFloatingHearts(count) {
-    for (let i = 0; i < count; i++) {
-      const heart = document.createElement('div');
-      heart.classList.add('heart-floating');
-      heart.style.left = Math.random() * 180 + "px";
-      heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
-      heart.style.animationDelay = Math.random() * 2 + "s";
-      heartsContainer.appendChild(heart);
-      heart.addEventListener('animationend', () => heart.remove());
-    }
+function fadeMusic() {
+  song.volume = 0;
+  song.play();
+  let v = 0;
+  const f = setInterval(() => {
+    v += 0.05;
+    song.volume = v;
+    if (v >= 1) clearInterval(f);
+  }, 200);
+}
+
+function spawnHearts() {
+  const HEARTS_COUNT = 7;
+  for (let i = 0; i < HEARTS_COUNT; i++) {
+    const h = document.createElement('div');
+    h.className = 'heart-fly';
+    h.style.left = 40 + Math.random() * 120 + 'px';
+    h.style.animationDelay = Math.random() * 1.5 + 's';
+    heartsBox.appendChild(h);
+    setTimeout(() => h.remove(), 4000);
   }
+}
 
-  function createLayeredFlower() {
-    const flower = document.createElement('div');
-    flower.classList.add('flower');
+function startGarden() {
+  const i = setInterval(() => {
+    if (flowerCount >= 80) return clearInterval(i);
+    createFlower();
+    flowerCount++;
+  }, 400);
+}
 
-    const photoRect = photoContainer.getBoundingClientRect();
-    let x = Math.random() * window.innerWidth;
-    let y = Math.random() * window.innerHeight;
+function createFlower() {
+  const f = document.createElement('div');
+  f.className = 'flower';
+  f.style.left = Math.random() * innerWidth + 'px';
+  f.style.top = Math.random() * innerHeight + 'px';
+  f.style.setProperty('--petal-color', COLORS[Math.floor(Math.random()*COLORS.length)]);
 
-    if (x > photoRect.left - 50 && x < photoRect.right + 50) {
-      x += 150;
-      if (x > window.innerWidth - 50) x -= 300;
+  const c = document.createElement('div');
+  c.className = 'flower-center';
+  f.appendChild(c);
+
+  for (let l = 0; l < 7; l++) {
+    const layer = document.createElement('div');
+    layer.className = 'petal-layer';
+    layer.style.animationDelay = l * 0.15 + 's';
+
+    const r = 30 - l * 4;
+    const s = 12 - l;
+
+    for (let i = 0; i < 8; i++) {
+      const p = document.createElement('div');
+      p.className = 'petal';
+      p.style.width = s + 'px';
+      p.style.height = s + 'px';
+      const a = (i / 8) * Math.PI * 2;
+      p.style.left = Math.cos(a) * r + 'px';
+      p.style.top = Math.sin(a) * r + 'px';
+      layer.appendChild(p);
     }
-    if (y > photoRect.top - 50 && y < photoRect.bottom + 50) {
-      y += 150;
-      if (y > window.innerHeight - 50) y -= 300;
-    }
-
-    flower.style.left = x + "px";
-    flower.style.top = y + "px";
-
-    const center = document.createElement('div');
-    center.classList.add('stem');
-    flower.appendChild(center);
-
-    // 7 слоев лепестков
-    const layers = [
-      { count: 8, radius: 28, size: 12, color: 'pink' },
-      { count: 8, radius: 24, size: 10, color: 'pink' },
-      { count: 8, radius: 20, size: 8, color: 'pink' },
-      { count: 8, radius: 16, size: 7, color: 'pink' },
-      { count: 8, radius: 12, size: 6, color: 'pink' },
-      { count: 8, radius: 8, size: 5, color: 'pink' },
-      
-    ];
-
-    layers.forEach(layer => {
-      for (let i = 0; i < layer.count; i++) {
-        const petal = document.createElement('div');
-        petal.classList.add('petal');
-        petal.style.width = layer.size + "px";
-        petal.style.height = layer.size + "px";
-        petal.style.background = layer.color;
-        const angle = (i / layer.count) * 2 * Math.PI;
-        petal.style.left = layer.radius * Math.cos(angle) + "px";
-        petal.style.top = layer.radius * Math.sin(angle) + "px";
-        flower.appendChild(petal);
-      }
-    });
-
-    flowersContainer.appendChild(flower);
+    f.appendChild(layer);
   }
-});
+  flowers.appendChild(f);
+}
