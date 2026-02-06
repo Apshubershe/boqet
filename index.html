@@ -2,31 +2,41 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
+  <title>Валентинка</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Открытка-сердце</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <div class="card" id="card">
     <div class="heart">
       <div class="left"></div>
       <div class="right"></div>
     </div>
-    <div class="paper" id="paper">
-      <div class="message" id="message">С Днем Валентина!</div>
+
+    <div class="paper">
+      <div class="message">С днём Валентина 💖</div>
     </div>
 
     <div class="photo-container" id="photoContainer">
-      <img src="red.jpg" alt="Ева" id="photo">
       <div class="second-message" id="secondMessage"></div>
+      <img src="eva.jpg" id="photo">
       <div class="hearts" id="hearts"></div>
     </div>
   </div>
 
   <button id="openBtn">Открыть сердечко</button>
 
-  <audio id="song" src="i_love.mp3"></audio>
+  <!-- Новая кнопка для ссылки -->
+  <a href="https://github.com/ТВОЙ_НИК/ИМЯ_РЕПОЗИТОРИЯ" 
+   target="_blank" 
+   id="projectBtn" 
+   class="project-btn hidden">
+   А теперь жмакни сюда
+</a>
 
+
+  <audio id="song" src="i_love.mp3"></audio>
   <div id="flowersContainer"></div>
 
   <script src="script.js"></script>
