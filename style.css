@@ -1,200 +1,241 @@
 body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(-45deg,#0d1b2a,#1b263b,#415a77,#1b1b2a);
+  background-size: 400% 400%;
+  animation: bg 15s infinite;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(-45deg, #0d1b2a, #1b263b, #415a77, #1b1b2a);
-  background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
-  overflow: hidden;
+  font-family: Arial;
 }
 
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+@keyframes bg {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }
 
+/* ===== КНОПКА ===== */
 button {
-  margin-top: 20px;
-  padding: 12px 24px;
+  margin-top: 25px;
+  padding: 12px 26px;
   font-size: 18px;
-  cursor: pointer;
-  border: none;
-  background-color: #ff4d6d;
-  color: white;
   border-radius: 8px;
-  transition: background 0.3s;
-  box-shadow: 0 6px 10px rgba(0,0,0,0.3);
-  z-index: 1;
+  border: none;
+  background: #ff4d6d;
+  color: white;
+  cursor: pointer;
+  z-index: 10;
 }
 
-button:hover { background-color: #ff1a3c; }
+/* ===== КНОПКА ДЛЯ ПРОЕКТА ===== */
+.project-btn {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 12px 20px;
+  background: #24292e;
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  text-decoration: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s;
+  z-index: 15;
+}
 
+.project-btn.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ===== КАРТОЧКА ===== */
 .card {
+  position: relative;
+  width: 220px;
+  height: 180px;
+  margin-bottom: 40px;
+}
+
+/* ===== СЕРДЦЕ ===== */
+.heart {
   position: relative;
   width: 187px;
   height: 180px;
-  perspective: 1000px;
-  margin-bottom: 40px; 
 }
 
-.heart {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.left, .right {
+.left,.right {
   position: absolute;
   width: 110px;
   height: 160px;
-  background: linear-gradient(to bottom, #ff4d6d, #c70039);
-  top: 0;
+  background: linear-gradient(#ff4d6d,#c70039);
   border-radius: 100px 100px 0 0;
+  top: 0;
   transform-origin: bottom center;
-  transition: transform 1s ease-in-out, box-shadow 1s ease-in-out;
-  box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+  transition: 1s;
 }
 
-.left { left: 0; transform: rotate(45deg); }
-.right { right: 0; transform: rotate(-45deg); }
+.left {
+  left: 0;
+  transform: rotate(45deg);
+}
 
-.card.open .left { transform: translateX(-150px) rotate(-10deg); box-shadow: -5px 10px 20px rgba(0,0,0,0.5); }
-.card.open .right { transform: translateX(150px) rotate(10deg); box-shadow: 5px 10px 20px rgba(0,0,0,0.5); }
+.right {
+  right: 0;
+  transform: rotate(-45deg);
+}
 
+.card.open .left {
+  transform: translateX(-160px) rotate(-10deg);
+}
+
+.card.open .right {
+  transform: translateX(160px) rotate(10deg);
+}
+
+/* ===== БУМАЖКА ===== */
 .paper {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 140px;
+  width: 150px;
   height: 100px;
   background: #fff2e6;
-  border: 2px solid #ff4d6d;
   border-radius: 8px;
-  transform: translate(-50%, -50%) scale(0);
+  transform: translate(-50%,-50%) scale(0);
+  transition: 1s;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0;
-  transition: transform 1s ease-in-out, opacity 1s ease-in-out;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.3), 0 0 20px rgba(255,77,109,0.3);
 }
 
 .card.open .paper {
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
+  transform: translate(-50%,-50%) scale(1);
 }
 
 .message {
   color: #ff4d6d;
   font-weight: bold;
-  font-size: 18px;
-  text-align: center;
 }
 
+/* ===== ФОТО ===== */
 .photo-container {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 200px;
-  height: 200px;
-  transform: translate(-50%, -50%) scale(0);
+  transform: translate(-50%,-50%) scale(0);
   opacity: 0;
+  transition: 1s;
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 2;
-  transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+  z-index: 5;
+}
+
+.photo-container.show {
+  transform: translate(-50%,-50%) scale(1);
+  opacity: 1;
 }
 
 #photo {
   width: 200px;
   height: 200px;
+  object-fit: cover;
   border-radius: 12px;
   border: 4px solid #ff4d6d;
-  object-fit: cover;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
 }
 
 .second-message {
-  color: #ff4d6d;
+  margin-bottom: 6px;
+  font-size: 16px;
   font-weight: bold;
-  font-size: 18px; /* уменьшено */
-  margin-bottom: 10px; 
+  color: #ff4d6d;
   opacity: 0;
-  transition: opacity 1s ease-in-out;
-  text-align: center;
-  z-index: 3;
 }
 
-.hearts {
+/* ===== ЛЕТАЮЩИЕ СЕРДЦА ===== */
+.heart-fly {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: visible;
+  width: 16px;
+  height: 16px;
+  background: red;
+  transform: rotate(-45deg);
+  animation: fly 4s linear forwards;
 }
 
-.heart-floating {
+.heart-fly::before,
+.heart-fly::after {
+  content: "";
   position: absolute;
-  width: 15px;
-  height: 15px;
+  width: 16px;
+  height: 16px;
   background: red;
   border-radius: 50%;
-  transform: rotate(-45deg);
-  animation: floatUp linear infinite;
-  opacity: 0.8;
 }
 
-@keyframes floatUp {
-  0% { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(-250px) scale(1) rotate(360deg); opacity: 0; }
+.heart-fly::before {
+  top: -8px;
+  left: 0;
 }
 
+.heart-fly::after {
+  left: 8px;
+  top: 0;
+}
+
+@keyframes fly {
+  from { transform: translateY(0) rotate(-45deg); opacity: 1; }
+  to { transform: translateY(-250px) rotate(-45deg); opacity: 0; }
+}
+
+/* ===== ЦВЕТЫ (САД) ===== */
 #flowersContainer {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   pointer-events: none;
-  z-index: 4;
 }
 
 .flower {
   position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
+  animation: sway 6s ease-in-out infinite;
+}
+
+@keyframes sway {
+  0%{transform:rotate(-2deg)}
+  50%{transform:rotate(2deg)}
+  100%{transform:rotate(-2deg)}
+}
+
+.flower-center {
+  width: 10px;
+  height: 10px;
+  background: #fffb00;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-30%,-30%);
+}
+
+.petal-layer {
+  position: absolute;
+  left: 50%;
+  top: 50%;
   transform: scale(0);
-  animation: bloom 1s forwards;
+  animation: bloom 0.6s forwards;
 }
 
 @keyframes bloom {
-  0% { opacity: 0; transform: scale(0); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-.stem {
-  width: 15px;
-  height: 15px;
-  background: green;
-  border-radius: 50%;
-  position: absolute; /* чтобы центр был по середине лепестков */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  to { transform: scale(1); }
 }
 
 .petal {
   position: absolute;
   border-radius: 50%;
-  background: pink;
+  background: var(--petal-color);
 }
